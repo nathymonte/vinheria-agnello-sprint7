@@ -1,0 +1,23 @@
+services:
+  catalog:
+    build: ./catalog-service
+    container_name: catalog
+    environment:
+      - PORT=3000
+    networks: [vinheria_net]
+    ports: ["3000:3000"]
+
+  orders:
+    build: ./orders-service
+    container_name: orders
+    environment:
+      - PORT=3001
+      - SHARED_SECRET=${SHARED_SECRET}
+      - CATALOG_URL=http://catalog:3000
+    depends_on: [catalog]
+    networks: [vinheria_net]
+    ports: ["3001:3001"]
+
+networks:
+  vinheria_net:
+    driver: bridge
